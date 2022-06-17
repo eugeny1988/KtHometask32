@@ -23,5 +23,14 @@ class Note(
 
     }
 
+    fun deleteComment(note: Note, commentId: Int): Boolean {
+        try {
+            note.commentsList.removeAt(commentId)
+        } catch (e: Exception) {
+            return false
+        }
+        return true
+    }
+
 
 }
