@@ -1,6 +1,7 @@
 class Note(
+    val ownerId: Int,
     val title: String,
-    val text: String,
+    var text: String,
     val commentsList: MutableList<NoteComments>
 ) {
     fun add(noteList: MutableList<Note>, note: Note): Boolean {
@@ -30,7 +31,23 @@ class Note(
             return false
         }
         return true
+        note.commentsList.get(commentId).isCommentDeleted = true
     }
+    fun edit(note: Note, text: String): Boolean{
+        note.text = text
+        return true
+    }
+    fun editComment(commentId: Int,note: Note, text: String): Boolean{
+        return if (!note.commentsList.get(commentId).isCommentDeleted) {
+            note.commentsList.get(commentId).message = text
+            true
+        } else return false
+    }
+    fun get(ownerId:Int): List<Note>{
+
+    }
+
+
 
 
 }
