@@ -1,3 +1,4 @@
+@Suppress("UNREACHABLE_CODE")
 class Note(
     val ownerId: Int,
     val noteId: Int,
@@ -50,14 +51,46 @@ class Note(
     fun get(ownerId: Int, noteList: MutableList<Note>): List<Note> {
         var noteListUser: MutableList<Note> = mutableListOf()
         for (noteLoop in noteList) {
-            if (ownerId === noteLoop.ownerId) {
+            if (ownerId == noteLoop.ownerId) {
                 noteListUser.add(noteListUser.lastIndex + 1, noteLoop)
             }
         }
         return noteListUser
     }
-    fun getById(noteId: Int): Note{
 
+    fun getById(noteId: Int, noteList: MutableList<Note>): Note? {
+        var note: Note? = null
+        for (noteLoop in noteList) {
+            if (noteLoop.noteId == noteId) {
+                note = noteLoop
+            }
+        }
+        return note
+    }
+
+    fun getComments(noteId: Int, noteList: MutableList<Note>): MutableList<NoteComments> {
+        var commentsList = mutableListOf<NoteComments>()
+        for (noteLoop in noteList) {
+            if (noteLoop.noteId == noteId) {
+                commentsList = noteLoop.commentsList
+            }
+        }
+        return commentsList
+    }
+
+    fun restoreComment(commentId: Int, ownerId: Int, noteList: MutableList<Note>): Boolean {
+        var result = false
+        for (noteLoop in noteList) {
+            if (noteLoop.ownerId == ownerId) {
+                for (commentLoop in noteLoop.commentsList) {
+                    if (commentLoop.commentId == commentId && commentLoop.isCommentDeleted) {
+                        noteLoop.commentsList.set(commentId,commentLoop)
+                        result = true
+                    }
+                }
+            }
+        }
+        return result
     }
 
 
