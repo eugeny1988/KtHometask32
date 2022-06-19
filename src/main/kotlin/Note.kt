@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull
-
 class Note(
     val ownerId: Int,
     val noteId: Int,
@@ -88,4 +86,11 @@ class Note(
     }
 
 
+}
+data class NoteComments(
+    val noteId: Int,
+    val commentId: Int,
+    var message: String,
+    var isCommentDeleted: Boolean
+) {
 }
