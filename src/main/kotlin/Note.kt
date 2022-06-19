@@ -1,4 +1,5 @@
-@Suppress("UNREACHABLE_CODE")
+import org.jetbrains.annotations.NotNull
+
 class Note(
     val ownerId: Int,
     val noteId: Int,
@@ -10,10 +11,15 @@ class Note(
         return noteList.add(note)
     }
 
-    fun createComment(noteList: List<Note>, noteComments: NoteComments): Int {
-        val note = noteList.get(noteComments.noteId)
-        note.commentsList.add(noteComments)
-        return note.commentsList.indexOf(noteComments)
+    fun createComment(text: String): Int {
+        var comment = NoteComments(
+            this.noteId,
+            this.commentsList.lastIndex + 1,
+            text,
+            false
+        )
+        this.commentsList.add(comment)
+        return this.commentsList.indexOf(comment) + 1
     }
 
     fun delete(id: Int, noteList: MutableList<Note>): Boolean {
@@ -26,24 +32,24 @@ class Note(
 
     }
 
-    fun deleteComment(note: Note, commentId: Int): Boolean {
+    fun deleteComment(commentId: Int): Boolean {
         try {
-            note.commentsList.removeAt(commentId)
+            this.commentsList.removeAt(commentId)
         } catch (e: Exception) {
             return false
         }
         return true
-        note.commentsList.get(commentId).isCommentDeleted = true
+        this.commentsList.get(commentId).isCommentDeleted = true
     }
 
-    fun edit(note: Note, text: String): Boolean {
-        note.text = text
+    fun edit(text: String): Boolean {
+        this.text = text
         return true
     }
 
-    fun editComment(commentId: Int, note: Note, text: String): Boolean {
-        return if (!note.commentsList.get(commentId).isCommentDeleted) {
-            note.commentsList.get(commentId).message = text
+    fun editComment(commentId: Int, text: String): Boolean {
+        return if (!this.commentsList.get(commentId).isCommentDeleted) {
+            this.commentsList.get(commentId).message = text
             true
         } else return false
     }
@@ -68,27 +74,15 @@ class Note(
         return note
     }
 
-    fun getComments(noteId: Int, noteList: MutableList<Note>): MutableList<NoteComments> {
-        var commentsList = mutableListOf<NoteComments>()
-        for (noteLoop in noteList) {
-            if (noteLoop.noteId == noteId) {
-                commentsList = noteLoop.commentsList
-            }
-        }
-        return commentsList
+    fun getComments(): MutableList<NoteComments> {
+        return this.commentsList
     }
 
-    fun restoreComment(commentId: Int, ownerId: Int, noteList: MutableList<Note>): Boolean {
+    fun restoreComment(commentId: Int): Boolean {
         var result = false
-        for (noteLoop in noteList) {
-            if (noteLoop.ownerId == ownerId) {
-                for (commentLoop in noteLoop.commentsList) {
-                    if (commentLoop.commentId == commentId && commentLoop.isCommentDeleted) {
-                        noteLoop.commentsList.set(commentId,commentLoop)
-                        result = true
-                    }
-                }
-            }
+        if (this.commentsList.get(commentId).isCommentDeleted) {
+            this.commentsList.add(commentId, this.commentsList.get(commentId))
+            result = true
         }
         return result
     }
