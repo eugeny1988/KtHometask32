@@ -36,13 +36,18 @@ class Note(
         } catch (e: Exception) {
             return false
         }
-        return true
         this.commentsList.get(commentId).isCommentDeleted = true
+        return true
     }
 
     fun edit(text: String): Boolean {
-        this.text = text
-        return true
+        var temp = true
+        try {
+            this.text = text
+        } catch (e: Exception){
+            temp = false
+        }
+        return temp
     }
 
     fun editComment(commentId: Int, text: String): Boolean {

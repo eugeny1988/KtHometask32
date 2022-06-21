@@ -50,6 +50,7 @@ val note3 = Note(
 fun main() {
     val added = note1.add(noteList, note3)
     val newCommentIndex = note1.createComment("Ещё один комментарий")
+    val deleted = note1.delete(2,noteList)
     val deleteComment = note1.deleteComment(13)
     val editNote2 = note2.edit("Новая запись")
     val editedComments = note3.editComment(2, "Привет")
